@@ -23,7 +23,7 @@ public class HabitAssignDtoMapperTest {
 
     @Test
     void convert() {
-
+        //
         HabitAssignDto expected = ModelUtils.getHabitAssignDto();
         HabitAssign habitAssign = HabitAssign.builder()
                 .id(1L)

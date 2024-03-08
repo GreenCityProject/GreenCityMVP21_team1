@@ -22,7 +22,7 @@ public class HabitDtoMapperTest {
 
     @Test
     void convert() {
-
+        //
         HabitDto expected = ModelUtils.getHabitDto();
         HabitTranslation habitTranslation = HabitTranslation.builder()
                 .id(1L)
