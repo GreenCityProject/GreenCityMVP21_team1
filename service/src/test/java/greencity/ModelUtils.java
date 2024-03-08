@@ -7,6 +7,7 @@ import greencity.dto.econews.*;
 import greencity.dto.econewscomment.*;
 import greencity.dto.habit.*;
 import greencity.dto.habitfact.*;
+import greencity.dto.habittranslation.HabitTranslationDto;
 import greencity.dto.language.LanguageDTO;
 import greencity.dto.language.LanguageTranslationDTO;
 import greencity.dto.language.LanguageVO;
@@ -239,6 +240,25 @@ public class ModelUtils {
                 .complexity(2)
                 .defaultDuration(2)
                 .isCustomHabit(true)
+                .shoppingListItems(Collections.emptySet())
+                .tags(Collections.emptySet())
+                .build();
+    }
+
+    public static HabitDto getHabitDto() {
+        return HabitDto.builder()
+                .id(null)
+                .image("image")
+                .complexity(2)
+                .defaultDuration(2)
+                .habitTranslation(HabitTranslationDto.builder()
+                        .habitItem("")
+                        .languageCode("en")
+                        .name("")
+                        .description("")
+                        .build())
+                .tags(Collections.emptyList())
+                .shoppingListItems(Collections.emptyList())
                 .build();
     }
 
@@ -271,6 +291,18 @@ public class ModelUtils {
             .habitStatistic(Collections.singletonList(getHabitStatistic()))
             .habitStatusCalendars(Collections.singletonList(getHabitStatusCalendar()))
             .lastEnrollmentDate(ZonedDateTime.now())
+            .build();
+    }
+
+    public static HabitAssignDto getHabitAssignDto() {
+        return HabitAssignDto.builder()
+            .id(1L)
+            .habitStreak(0)
+            .userId(1L)
+            .status(HabitAssignStatus.ACQUIRED)
+            .workingDays(0)
+            .habitStatusCalendarDtoList(new ArrayList<>())
+            .duration(0)
             .build();
     }
 
