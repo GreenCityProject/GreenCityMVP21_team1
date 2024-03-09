@@ -294,6 +294,17 @@ public class ModelUtils {
             .build();
     }
 
+    public static HabitAssignManagementDto getHabitAssignManagementDto() {
+        return HabitAssignManagementDto.builder()
+                .id(1L)
+                .habitStreak(0)
+                .userId(1L)
+                .status(HabitAssignStatus.ACQUIRED)
+                .workingDays(0)
+                .duration(0)
+                .build();
+    }
+
     public static HabitAssignDto getHabitAssignDto() {
         return HabitAssignDto.builder()
             .id(1L)
