@@ -39,7 +39,7 @@ public class EventDtoResponse implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishDate;
 
-    @NotEmpty
+    @NotNull
     private Integer duration;
 
     @NotEmpty
@@ -56,5 +56,5 @@ public class EventDtoResponse implements Serializable {
     private String image;
 
     @NotEmpty
-    private UserVO userVO;
+    private AuthorDto userVO;
 }

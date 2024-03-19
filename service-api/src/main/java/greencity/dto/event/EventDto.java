@@ -37,7 +37,7 @@ public class EventDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishDate;
 
-    @NotEmpty
+    @NotNull
     private Integer duration;
 
     @NotEmpty
