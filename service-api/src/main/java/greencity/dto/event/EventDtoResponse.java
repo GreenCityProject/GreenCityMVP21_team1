@@ -23,19 +23,23 @@ import java.time.Period;
 @EqualsAndHashCode
 public class EventDtoResponse implements Serializable {
 
+    public static final int MIN_DESCRIPTION_LENGTH = 20;
+    public static final int MAX_DESCRIPTION_LENGTH = 63_206;
+    public static final int MAX_TITLE_LENGTH = 70;
+
     @NotNull
     @Min(1)
     private Long id;
 
     @NotEmpty
-    @Length(max = 70)
+    @Length(max = MAX_TITLE_LENGTH)
     private String eventTitle;
 
-    @NotEmpty
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
-    @NotEmpty
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishDate;
 
@@ -46,7 +50,7 @@ public class EventDtoResponse implements Serializable {
     private String location;
 
     @NotEmpty
-    @Length(min = 20, max = 63_206)
+    @Length(min = MIN_DESCRIPTION_LENGTH, max = MAX_DESCRIPTION_LENGTH)
     private String description;
 
     @NotEmpty
@@ -55,6 +59,6 @@ public class EventDtoResponse implements Serializable {
     @NotEmpty
     private String image;
 
-    @NotEmpty
-    private AuthorDto userVO;
+    @NotNull
+    private AuthorDto author;
 }

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,12 +37,11 @@ public class EventController {
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = HttpStatuses.CREATED,
             content = @Content(schema = @Schema(implementation = EventDto.class))),
     })
-    @PostMapping(value = "/create",
-            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventDtoResponse> save(
-            @RequestPart @Validated EventDtoRequest eventDtoRequest,
-            @Parameter(description = "Image of event") @ImageValidation
-            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart @Valid EventDtoRequest eventDtoRequest,
+            @Parameter(description = "Image of event")
+            @ImageValidation @RequestPart(required = false, name = "image") MultipartFile image,
             @Parameter(hidden = true) Principal principal) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 eventService.save(eventDtoRequest, image, principal.getName()));

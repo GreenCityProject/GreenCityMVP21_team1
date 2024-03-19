@@ -21,19 +21,23 @@ import java.time.Period;
 @EqualsAndHashCode
 public class EventDto {
 
+    public static final int MIN_DESCRIPTION_LENGTH = 20;
+    public static final int MAX_DESCRIPTION_LENGTH = 63_206;
+    public static final int MAX_TITLE_LENGTH = 70;
+
     @NotNull
     @Length(min = 1)
     private Long id;
 
     @NotEmpty
-    @Length(max = 70)
+    @Length(max = MAX_TITLE_LENGTH)
     private String eventTitle;
 
-    @NotEmpty
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
-    @NotEmpty
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate finishDate;
 
@@ -44,7 +48,7 @@ public class EventDto {
     private String location;
 
     @NotEmpty
-    @Length(min = 20, max = 63_206)
+    @Length(min = MIN_DESCRIPTION_LENGTH, max = MAX_DESCRIPTION_LENGTH)
     private String description;
 
     @NotEmpty
@@ -53,6 +57,6 @@ public class EventDto {
     @NotEmpty
     private String image;
 
-    @NotEmpty
+    @NotNull
     private AuthorDto author;
 }
