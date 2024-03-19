@@ -14,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Period;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,9 @@ public class EventServiceImpl implements EventService {
             newEventToSave.setLocation(eventDtoRequest.getLocation());
             newEventToSave.setImage(image.getName());
             newEventToSave.setDescription(eventDtoRequest.getDescription());
-            newEventToSave.setDuration(eventDtoRequest.getFinishDate().minusDays(eventDtoRequest.getStartDate().getDayOfMonth()));
+            Period period = Period.between(eventDtoRequest.getStartDate(), eventDtoRequest.getFinishDate());
+            int durationDays = period.getDays();
+            newEventToSave.setDuration(durationDays);
             Event savedEvent = eventRepo.save(newEventToSave);
 
             return modelMapper.map(savedEvent, EventDtoResponse.class);

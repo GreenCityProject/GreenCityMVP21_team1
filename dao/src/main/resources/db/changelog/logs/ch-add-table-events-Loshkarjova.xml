@@ -12,9 +12,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="event_title" type="VARCHAR"/>
-            <column name="start_date" type="TIMESTAMP WITH TIME ZONE"/>
-            <column name="finish_date" type="TIMESTAMP WITH TIME ZONE"/>
-            <column name="duration" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="start_date" type="DATE"/>
+            <column name="finish_date" type="DATE"/>
+            <column name="duration" type="INT"/>
             <column name="location" type="VARCHAR"/>
             <column name="description" type="VARCHAR"/>
             <column name="status" type="VARCHAR"/>

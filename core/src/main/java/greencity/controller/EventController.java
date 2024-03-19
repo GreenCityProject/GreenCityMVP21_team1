@@ -39,7 +39,7 @@ public class EventController {
     @PostMapping(value = "/create",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventDtoResponse> save(
-            @RequestParam @Validated EventDtoRequest eventDtoRequest,
+            @RequestBody @Validated EventDtoRequest eventDtoRequest,
             @Parameter(description = "Image of event") @ImageValidation
             @RequestParam(required = false) MultipartFile image,
             @Parameter(hidden = true) Principal principal) {

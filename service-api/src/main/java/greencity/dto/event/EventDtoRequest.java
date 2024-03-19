@@ -9,7 +9,9 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,16 +29,15 @@ public class EventDtoRequest {
     private String location;
 
     @NotEmpty
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
 
     @NotEmpty
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime finishDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate finishDate;
 
     @NotEmpty
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime duration;
+    private Integer duration;
 
     @NotEmpty
     @Length(min = 20, max = 63_206)

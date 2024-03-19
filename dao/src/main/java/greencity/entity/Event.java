@@ -5,7 +5,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Entity
 @NoArgsConstructor
@@ -17,7 +20,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString(exclude = "author")
 public class Event {
-    private final static String eventDefaultStatus = "opened";
+    private final static String EVENT_DEFAULT_STATUS = "opened";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -28,15 +31,15 @@ public class Event {
     private String eventTitle;
 
     @Column(name = "start_date", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
 
     @Column(name = "finish_date", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime finishDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate finishDate;
 
     @Column(name = "duration", nullable = false)
-    private LocalDateTime duration ;
+    private Integer duration ;
 
     @Column(name = "location", nullable = false)
     private String location;
@@ -46,7 +49,7 @@ public class Event {
     private String description;
 
     @Column(name = "status", nullable = false)
-    private String status = eventDefaultStatus;
+    private String status = EVENT_DEFAULT_STATUS;
 
     @Column(name = "image", nullable = false)
     private String image;

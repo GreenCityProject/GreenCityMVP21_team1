@@ -2,16 +2,15 @@ package greencity.dto.event;
 
 
 import greencity.dto.user.AuthorDto;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,16 +30,15 @@ public class EventDto {
     private String eventTitle;
 
     @NotEmpty
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
 
     @NotEmpty
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime finishDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate finishDate;
 
     @NotEmpty
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss.zzz")
-    private LocalDateTime duration;
+    private Integer duration;
 
     @NotEmpty
     private String location;
