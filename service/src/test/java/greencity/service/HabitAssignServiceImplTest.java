@@ -69,17 +69,14 @@ public class HabitAssignServiceImplTest {
     @InjectMocks
     HabitAssignServiceImpl habitAssignService;
 
-
     @Test
     void getByHabitAssignIdAndUserId_habitAssignIdNotExists_throwException() {
         Long nonExistedHabitAssignId = 1L;
         Mockito.when(habitAssignRepo.findById(nonExistedHabitAssignId)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> habitAssignService.getByHabitAssignIdAndUserId(
-                nonExistedHabitAssignId, 1L, "Java"));
+            nonExistedHabitAssignId, 1L, "Java"));
     }
-
-
 
     @Test
     void getByHabitAssignIdAndUserId_userIdNotEquals_throwException() {
@@ -94,11 +91,9 @@ public class HabitAssignServiceImplTest {
         Mockito.when(habitAssignRepo.findById(existedHabitAssignId)).thenReturn(Optional.of(habitAssign));
 
         assertThrows(UserHasNoPermissionToAccessException.class,
-                () -> habitAssignService.getByHabitAssignIdAndUserId(
-                        existedHabitAssignId, 3L, "Java"
-                ));
+            () -> habitAssignService.getByHabitAssignIdAndUserId(
+                existedHabitAssignId, 3L, "Java"));
     }
-
 
     @Test
     void getByHabitAssignIdAndUserId_habitTranslationDoesNotEqualsLanguage_throwException() {
@@ -118,10 +113,9 @@ public class HabitAssignServiceImplTest {
         habitAssign.setHabit(Habit.builder().habitTranslations(habitTranslations).build());
         Mockito.when(habitAssignRepo.findById(1L)).thenReturn(Optional.of(habitAssign));
         assertThrows(NotFoundException.class, () -> habitAssignService
-                .getByHabitAssignIdAndUserId(1L, 2L, "JS"));
+            .getByHabitAssignIdAndUserId(1L, 2L, "JS"));
 
     }
-
 
     @Test
     void assignDefaultHabitForUser_checkStatusInProgressExists_throwException() {
@@ -142,7 +136,7 @@ public class HabitAssignServiceImplTest {
         Mockito.when(habitAssignRepo.findAllByUserId(userVOId)).thenReturn(habitAssigns);
 
         assertThrows(UserAlreadyHasHabitAssignedException.class, () -> habitAssignService
-                .assignDefaultHabitForUser(habitId, userVO));
+            .assignDefaultHabitForUser(habitId, userVO));
     }
 
     @Test
@@ -187,13 +181,12 @@ public class HabitAssignServiceImplTest {
         Mockito.when(habitAssignRepo.findAllByUserId(userVOId)).thenReturn(habitAssigns);
         Mockito.when(habitRepo.findById(habitId)).thenReturn(Optional.of(habit));
 
-
         Mockito.when(modelMapper.map(userVO, User.class)).thenReturn(User.builder().id(existedUserId).build());
         Mockito.when(habitAssignRepo.countHabitAssignsByUserIdAndAcquiredFalseAndCancelledFalse(existedUserId))
-                .thenReturn(AppConstant.MAX_NUMBER_OF_HABIT_ASSIGNS_FOR_USER);
+            .thenReturn(AppConstant.MAX_NUMBER_OF_HABIT_ASSIGNS_FOR_USER);
 
         assertThrows(UserAlreadyHasMaxNumberOfActiveHabitAssigns.class,
-                () -> habitAssignService.assignDefaultHabitForUser(1L, userVO));
+            () -> habitAssignService.assignDefaultHabitForUser(1L, userVO));
     }
 
     @Test
@@ -223,13 +216,12 @@ public class HabitAssignServiceImplTest {
 
             Mockito.when(modelMapper.map(userVO, User.class)).thenReturn(User.builder().id(existedUserId).build());
             Mockito.when(habitAssignRepo.findByHabitIdAndUserIdAndCreateDate(habitId, existedUserId, zonedDateTime))
-                    .thenReturn(Optional.of(habitAssign));
+                .thenReturn(Optional.of(habitAssign));
             assertThrows(UserAlreadyHasHabitAssignedException.class, () -> habitAssignService
-                    .assignDefaultHabitForUser(habitId, userVO));
+                .assignDefaultHabitForUser(habitId, userVO));
         }
 
     }
-    //Todo
-
+    // Todo
 
 }

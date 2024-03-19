@@ -161,4 +161,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Filter> filters = new ArrayList<>();
+
+    @OneToMany(mappedBy ="author",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Event> events;
 }

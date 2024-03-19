@@ -31,7 +31,6 @@ public class HabitShoppingListItemServiceImplTest {
     @InjectMocks
     private HabitShoppingListItemServiceImpl habitShoppingListItemService;
 
-
     @Test
     void unlinkShoppingListItems_findHabitByNotExistedId_throwException() {
         List<Long> shopIds = new ArrayList<>();
@@ -40,7 +39,7 @@ public class HabitShoppingListItemServiceImplTest {
         when(habitRepo.findById(notExistedHabitId)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(NoSuchElementException.class,
-                () -> habitShoppingListItemService.unlinkShoppingListItems(shopIds, notExistedHabitId));
+            () -> habitShoppingListItemService.unlinkShoppingListItems(shopIds, notExistedHabitId));
     }
 
     @Test
@@ -57,7 +56,7 @@ public class HabitShoppingListItemServiceImplTest {
         when(shoppingListItemRepo.findById(nonExistedShopId)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(NoSuchElementException.class,
-                () -> habitShoppingListItemService.unlinkShoppingListItems(shopIds, existedHabitId));
+            () -> habitShoppingListItemService.unlinkShoppingListItems(shopIds, existedHabitId));
 
     }
 
@@ -80,9 +79,9 @@ public class HabitShoppingListItemServiceImplTest {
         when(habitRepo.findById(existedHabitId)).thenReturn(Optional.of(habit));
         when(shoppingListItemRepo.findById(existedShopId)).thenReturn(Optional.of(shoppingListItem));
 
-        habitShoppingListItemService.unlinkShoppingListItems(shopIds,existedHabitId);
+        habitShoppingListItemService.unlinkShoppingListItems(shopIds, existedHabitId);
 
         Assertions.assertEquals(0, habit.getShoppingListItems().size());
-        Mockito.verify(habitRepo,times(1)).save(habit);
+        Mockito.verify(habitRepo, times(1)).save(habit);
     }
 }

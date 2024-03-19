@@ -1,6 +1,5 @@
 package greencity.service;
 
-
 import greencity.dto.PageableAdvancedDto;
 import greencity.dto.language.LanguageDTO;
 import greencity.dto.language.LanguageTranslationDTO;
@@ -42,7 +41,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ShoppingListItemServiceImplTest {
-    
+
     @Mock
     ShoppingListItemTranslationRepo shoppingListItemTranslationRepo;
 
@@ -64,11 +63,11 @@ public class ShoppingListItemServiceImplTest {
     public void initModelMapper() {
         modelMapper = new ModelMapper();
         modelMapper
-                .getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT)
-                .setFieldMatchingEnabled(true)
-                .setSkipNullEnabled(true)
-                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
+            .getConfiguration()
+            .setMatchingStrategy(MatchingStrategies.STRICT)
+            .setFieldMatchingEnabled(true)
+            .setSkipNullEnabled(true)
+            .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
         modelMapper.addConverter(new ShoppingListItemDtoMapper());
         modelMapper.addConverter(new UserShoppingListItemResponseDtoMapper());
         Field field;
@@ -85,16 +84,21 @@ public class ShoppingListItemServiceImplTest {
     void findAllTest() {
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        SLITranslationFirst.setShoppingListItem(new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(new Habit()), List.of(new ShoppingListItemTranslation())));
+        SLITranslationFirst.setShoppingListItem(new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(new Habit()), List.of(new ShoppingListItemTranslation())));
 
         var SLITranslationSecond = new ShoppingListItemTranslation();
         SLITranslationSecond.setContent("Wowables reusable & biodegradable paper towel");
-        SLITranslationSecond.setShoppingListItem(new ShoppingListItem(2L, List.of(new UserShoppingListItem()), Set.of(new Habit()), List.of(new ShoppingListItemTranslation())));
+        SLITranslationSecond.setShoppingListItem(new ShoppingListItem(2L, List.of(new UserShoppingListItem()),
+            Set.of(new Habit()), List.of(new ShoppingListItemTranslation())));
 
-        var expected = List.of(new ShoppingListItemDto(1L, "Swedish cellulose dish cloths", "ACTIVE"), new ShoppingListItemDto(2L, "Wowables reusable & biodegradable paper towel", "ACTIVE"));
-        List<ShoppingListItemTranslation> shoppingListItemTranslationList = List.of(SLITranslationFirst, SLITranslationSecond);
+        var expected = List.of(new ShoppingListItemDto(1L, "Swedish cellulose dish cloths", "ACTIVE"),
+            new ShoppingListItemDto(2L, "Wowables reusable & biodegradable paper towel", "ACTIVE"));
+        List<ShoppingListItemTranslation> shoppingListItemTranslationList =
+            List.of(SLITranslationFirst, SLITranslationSecond);
 
-        Mockito.when(shoppingListItemTranslationRepo.findAllByLanguageCode(Mockito.any(String.class))).thenReturn(shoppingListItemTranslationList);
+        Mockito.when(shoppingListItemTranslationRepo.findAllByLanguageCode(Mockito.any(String.class)))
+            .thenReturn(shoppingListItemTranslationList);
 
         List<ShoppingListItemDto> actual = shoppingListItemService.findAll("en");
 
@@ -103,13 +107,15 @@ public class ShoppingListItemServiceImplTest {
 
     @Test
     void saveShoppingListItemTest() {
-        var LanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(1L, "en"), "Swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
+        var LanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(1L, "en"), "Swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
         var sLIPostDto = new ShoppingListItemPostDto(LanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var toSaveSLI = modelMapper.map(sLIPostDto, ShoppingListItem.class);
         toSaveSLI.getTranslations().forEach(a -> a.setShoppingListItem(toSaveSLI));
         List<LanguageTranslationDTO> expected = modelMapper.map(toSaveSLI.getTranslations(),
-                new TypeToken<List<LanguageTranslationDTO>>() {
-                }.getType());
+            new TypeToken<List<LanguageTranslationDTO>>() {
+            }.getType());
         List<LanguageTranslationDTO> actual = shoppingListItemService.saveShoppingListItem(sLIPostDto);
 
         Mockito.verify(shoppingListItemRepo, Mockito.times(1)).save(toSaveSLI);
@@ -118,8 +124,11 @@ public class ShoppingListItemServiceImplTest {
 
     @Test
     void update_NotFoundEntity_ThrowException() {
-        var toUpdateLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
-        var toUpdateSLIPostDto = new ShoppingListItemPostDto(toUpdateLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var toUpdateLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
+        var toUpdateSLIPostDto =
+            new ShoppingListItemPostDto(toUpdateLanguageTranslationDtoList, new ShoppingListItemRequestDto());
 
         Mockito.when(shoppingListItemRepo.findById(Mockito.any())).thenReturn(Optional.empty());
 
@@ -128,18 +137,25 @@ public class ShoppingListItemServiceImplTest {
 
     @Test
     void updateTest() {
-        var toUpdateLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
-        var toUpdateSLIPostDto = new ShoppingListItemPostDto(toUpdateLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var toUpdateLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
+        var toUpdateSLIPostDto =
+            new ShoppingListItemPostDto(toUpdateLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var expectedSLI = modelMapper.map(toUpdateSLIPostDto, ShoppingListItem.class);
-        var LanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
-        var originalSLIPostDto = new ShoppingListItemPostDto(LanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var LanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
+        var originalSLIPostDto =
+            new ShoppingListItemPostDto(LanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var originalSLI = modelMapper.map(originalSLIPostDto, ShoppingListItem.class);
 
-        Mockito.when(shoppingListItemRepo.findById(toUpdateSLIPostDto.getShoppingListItem().getId())).thenReturn(Optional.of(originalSLI));
+        Mockito.when(shoppingListItemRepo.findById(toUpdateSLIPostDto.getShoppingListItem().getId()))
+            .thenReturn(Optional.of(originalSLI));
 
         List<LanguageTranslationDTO> expected = modelMapper.map(expectedSLI.getTranslations(),
-                new TypeToken<List<LanguageTranslationDTO>>() {
-                }.getType());
+            new TypeToken<List<LanguageTranslationDTO>>() {
+            }.getType());
         List<LanguageTranslationDTO> actual = shoppingListItemService.update(toUpdateSLIPostDto);
 
         Mockito.verify(shoppingListItemRepo, Mockito.times(1)).save(expectedSLI);
@@ -150,13 +166,17 @@ public class ShoppingListItemServiceImplTest {
     @Test
     void findShoppingListItemById_NotFoundEntity_ThrowException() {
         Mockito.when(shoppingListItemRepo.findById(Mockito.any())).thenReturn(Optional.empty());
-        assertThrows(ShoppingListItemNotFoundException.class, () -> shoppingListItemService.findShoppingListItemById(Mockito.any()));
+        assertThrows(ShoppingListItemNotFoundException.class,
+            () -> shoppingListItemService.findShoppingListItemById(Mockito.any()));
     }
 
     @Test
     void findShoppingListItemByIdTest() {
-        var toUpdateLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
-        var toUpdateSLIPostDto = new ShoppingListItemPostDto(toUpdateLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var toUpdateLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
+        var toUpdateSLIPostDto =
+            new ShoppingListItemPostDto(toUpdateLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var expectedSLI = modelMapper.map(toUpdateSLIPostDto, ShoppingListItem.class);
         var expected = modelMapper.map(expectedSLI, ShoppingListItemResponseDto.class);
 
@@ -183,11 +203,17 @@ public class ShoppingListItemServiceImplTest {
     @Test
     void findShoppingListItemsForManagementByPageTest() {
         Pageable pageable = Mockito.mock(Pageable.class);
-        var firstExampleLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
-        var firstExampleSLIPostDto = new ShoppingListItemPostDto(firstExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var firstExampleLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
+        var firstExampleSLIPostDto =
+            new ShoppingListItemPostDto(firstExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var firstExampleSLI = modelMapper.map(firstExampleSLIPostDto, ShoppingListItem.class);
-        var secondExampleLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
-        var secondExampleSLIPostDto = new ShoppingListItemPostDto(secondExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var secondExampleLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
+        var secondExampleSLIPostDto =
+            new ShoppingListItemPostDto(secondExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var secondExampleSLI = modelMapper.map(secondExampleSLIPostDto, ShoppingListItem.class);
         List<ShoppingListItem> mockItems = List.of(firstExampleSLI, secondExampleSLI);
         Page<ShoppingListItem> mockPage = new PageImpl<>(mockItems, pageable, mockItems.size());
@@ -195,14 +221,14 @@ public class ShoppingListItemServiceImplTest {
         Mockito.when(shoppingListItemRepo.findAll(pageable)).thenReturn(mockPage);
 
         List<ShoppingListItemManagementDto> expectedDtos = mockItems.stream()
-                .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
-                .collect(Collectors.toList());
+            .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
+            .collect(Collectors.toList());
         PageableAdvancedDto<ShoppingListItemManagementDto> expectedDtoPage =
-                new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
-                        mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
-                        mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
+            new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
+                mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
+                mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
         PageableAdvancedDto<ShoppingListItemManagementDto> result =
-                shoppingListItemService.findShoppingListItemsForManagementByPage(pageable);
+            shoppingListItemService.findShoppingListItemsForManagementByPage(pageable);
 
         assertEquals(expectedDtoPage, result);
     }
@@ -219,11 +245,17 @@ public class ShoppingListItemServiceImplTest {
     void searchByTest() {
         Pageable pageable = Mockito.mock(Pageable.class);
         String query = "cellulose";
-        var firstExampleLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
-        var firstExampleSLIPostDto = new ShoppingListItemPostDto(firstExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var firstExampleLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
+        var firstExampleSLIPostDto =
+            new ShoppingListItemPostDto(firstExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var firstExampleSLI = modelMapper.map(firstExampleSLIPostDto, ShoppingListItem.class);
-        var secondExampleLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
-        var secondExampleSLIPostDto = new ShoppingListItemPostDto(secondExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var secondExampleLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
+        var secondExampleSLIPostDto =
+            new ShoppingListItemPostDto(secondExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var secondExampleSLI = modelMapper.map(secondExampleSLIPostDto, ShoppingListItem.class);
         List<ShoppingListItem> mockItems = List.of(firstExampleSLI, secondExampleSLI);
         Page<ShoppingListItem> mockPage = new PageImpl<>(mockItems, pageable, mockItems.size());
@@ -231,44 +263,49 @@ public class ShoppingListItemServiceImplTest {
         when(shoppingListItemRepo.searchBy(pageable, query)).thenReturn(mockPage);
 
         List<ShoppingListItemManagementDto> expectedDtos = mockItems.stream()
-                .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
-                .collect(Collectors.toList());
+            .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
+            .collect(Collectors.toList());
         PageableAdvancedDto<ShoppingListItemManagementDto> expectedDtoPage =
-                new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
-                        mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
-                        mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
+            new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
+                mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
+                mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
         PageableAdvancedDto<ShoppingListItemManagementDto> result =
-                shoppingListItemService.searchBy(pageable, query);
+            shoppingListItemService.searchBy(pageable, query);
 
         assertEquals(expectedDtoPage, result);
     }
-
 
     @Test
     void getFilteredDataForManagementByPageTest() {
         Pageable pageable = Mockito.mock(Pageable.class);
         ShoppingListItemViewDto mockDto = new ShoppingListItemViewDto();
-        var firstExampleLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
-        var firstExampleSLIPostDto = new ShoppingListItemPostDto(firstExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var firstExampleLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Серветки целюлозні"));
+        var firstExampleSLIPostDto =
+            new ShoppingListItemPostDto(firstExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var firstExampleSLI = modelMapper.map(firstExampleSLIPostDto, ShoppingListItem.class);
-        var secondExampleLanguageTranslationDtoList = List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"), new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
-        var secondExampleSLIPostDto = new ShoppingListItemPostDto(secondExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
+        var secondExampleLanguageTranslationDtoList =
+            List.of(new LanguageTranslationDTO(new LanguageDTO(2L, "en"), "Deprecated swedish cellulose dish cloths"),
+                new LanguageTranslationDTO(new LanguageDTO(1L, "ua"), "Deprecated Серветки целюлозні"));
+        var secondExampleSLIPostDto =
+            new ShoppingListItemPostDto(secondExampleLanguageTranslationDtoList, new ShoppingListItemRequestDto());
         var secondExampleSLI = modelMapper.map(secondExampleSLIPostDto, ShoppingListItem.class);
         List<ShoppingListItem> mockItems = List.of(firstExampleSLI, secondExampleSLI);
         Page<ShoppingListItem> mockPage = new PageImpl<>(mockItems, pageable, mockItems.size());
 
         when(shoppingListItemRepo.findAll(Mockito.any(ShoppingListItemSpecification.class), Mockito.eq(pageable)))
-                .thenReturn(mockPage);
+            .thenReturn(mockPage);
 
         List<ShoppingListItemManagementDto> expectedDtos = mockItems.stream()
-                .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
-                .collect(Collectors.toList());
+            .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
+            .collect(Collectors.toList());
         PageableAdvancedDto<ShoppingListItemManagementDto> expectedDtoPage =
-                new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
-                        mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
-                        mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
+            new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
+                mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
+                mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
         PageableAdvancedDto<ShoppingListItemManagementDto> result =
-                shoppingListItemService.getFilteredDataForManagementByPage(pageable, mockDto);
+            shoppingListItemService.getFilteredDataForManagementByPage(pageable, mockDto);
 
         assertEquals(expectedDtoPage, result);
     }
@@ -278,7 +315,8 @@ public class ShoppingListItemServiceImplTest {
         Habit habit = new Habit();
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(habit), List.of(new ShoppingListItemTranslation()));
+        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(habit), List.of(new ShoppingListItemTranslation()));
         SLITranslationFirst.setShoppingListItem(shoppingListItemFirst);
         List<ShoppingListItemTranslation> shoppingListItemTranslationList = List.of(SLITranslationFirst);
         Long userId = 1L;
@@ -300,7 +338,8 @@ public class ShoppingListItemServiceImplTest {
         userShoppingListItemList.add(userShoppingListItem);
         userShoppingListItem.setId(1L);
         userShoppingListItem.setHabitAssign(habitAssign);
-        userShoppingListItem.setShoppingListItem(new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
+        userShoppingListItem.setShoppingListItem(
+            new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
         habit.setShoppingListItems(Set.of(shoppingListItemFirst));
         habitAssign.setUserShoppingListItems(userShoppingListItemList);
 
@@ -324,7 +363,7 @@ public class ShoppingListItemServiceImplTest {
         when(habitAssignRepo.findByHabitIdAndUserId(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 
         assertThrows(UserHasNoShoppingListItemsException.class,
-                () -> shoppingListItemService.saveUserShoppingListItems(userId, habitId, dtoList, language));
+            () -> shoppingListItemService.saveUserShoppingListItems(userId, habitId, dtoList, language));
     }
 
     @Test
@@ -332,7 +371,8 @@ public class ShoppingListItemServiceImplTest {
         Habit habit = new Habit();
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(habit), List.of(new ShoppingListItemTranslation()));
+        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(habit), List.of(new ShoppingListItemTranslation()));
         SLITranslationFirst.setShoppingListItem(shoppingListItemFirst);
         List<ShoppingListItemTranslation> shoppingListItemTranslationList = List.of(SLITranslationFirst);
         Long userId = 1L;
@@ -354,7 +394,8 @@ public class ShoppingListItemServiceImplTest {
         userShoppingListItemList.add(userShoppingListItem);
         userShoppingListItem.setId(1L);
         userShoppingListItem.setHabitAssign(habitAssign);
-        userShoppingListItem.setShoppingListItem(new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
+        userShoppingListItem.setShoppingListItem(
+            new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
         habit.setShoppingListItems(Set.of(shoppingListItemFirst));
         habitAssign.setUserShoppingListItems(userShoppingListItemList);
 
@@ -362,16 +403,16 @@ public class ShoppingListItemServiceImplTest {
         when(habitAssignRepo.findByHabitIdAndUserId(habitId, userId)).thenReturn(Optional.of(habitAssign));
 
         assertThrows(NotFoundException.class,
-                () -> shoppingListItemService.saveUserShoppingListItems(userId, habitId, dtoList, language));
+            () -> shoppingListItemService.saveUserShoppingListItems(userId, habitId, dtoList, language));
     }
-
 
     @Test
     void saveUserShoppingListItems_ThrowShoppingListItemAlreadySelectedException() {
         Habit habit = new Habit();
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(habit), List.of(new ShoppingListItemTranslation()));
+        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(habit), List.of(new ShoppingListItemTranslation()));
         SLITranslationFirst.setShoppingListItem(shoppingListItemFirst);
         List<ShoppingListItemTranslation> shoppingListItemTranslationList = List.of(SLITranslationFirst);
         Long userId = 1L;
@@ -393,7 +434,8 @@ public class ShoppingListItemServiceImplTest {
         userShoppingListItemList.add(userShoppingListItem);
         userShoppingListItem.setId(1L);
         userShoppingListItem.setHabitAssign(habitAssign);
-        userShoppingListItem.setShoppingListItem(new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
+        userShoppingListItem.setShoppingListItem(
+            new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
         habit.setShoppingListItems(Set.of(shoppingListItemFirst));
         habitAssign.setUserShoppingListItems(userShoppingListItemList);
 
@@ -403,7 +445,7 @@ public class ShoppingListItemServiceImplTest {
         when(userShoppingListItemRepo.getAllAssignedShoppingListItems(Mockito.anyLong())).thenReturn(List.of(1L));
 
         assertThrows(WrongIdException.class,
-                () -> shoppingListItemService.saveUserShoppingListItems(userId, habitId, dtoList, language));
+            () -> shoppingListItemService.saveUserShoppingListItems(userId, habitId, dtoList, language));
     }
 
     @Test
@@ -414,7 +456,8 @@ public class ShoppingListItemServiceImplTest {
 
         when(habitAssignRepo.findByHabitIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.empty());
 
-        List<UserShoppingListItemResponseDto> result = shoppingListItemService.getUserShoppingList(userId, habitId, language);
+        List<UserShoppingListItemResponseDto> result =
+            shoppingListItemService.getUserShoppingList(userId, habitId, language);
 
         assertEquals(Collections.emptyList(), result);
     }
@@ -428,7 +471,7 @@ public class ShoppingListItemServiceImplTest {
         when(habitAssignRepo.findById(habitAssignId)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class,
-                () -> shoppingListItemService.getUserShoppingListByHabitAssignId(userId, habitAssignId, language));
+            () -> shoppingListItemService.getUserShoppingListByHabitAssignId(userId, habitAssignId, language));
     }
 
     @Test
@@ -444,7 +487,7 @@ public class ShoppingListItemServiceImplTest {
         when(habitAssignRepo.findById(habitAssignId)).thenReturn(Optional.of(habitAssign));
 
         assertThrows(UserHasNoPermissionToAccessException.class,
-                () -> shoppingListItemService.getUserShoppingListByHabitAssignId(userId, habitAssignId, language));
+            () -> shoppingListItemService.getUserShoppingListByHabitAssignId(userId, habitAssignId, language));
     }
 
     @Test
@@ -455,7 +498,8 @@ public class ShoppingListItemServiceImplTest {
         Habit habit = new Habit();
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(habit), List.of(new ShoppingListItemTranslation()));
+        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(habit), List.of(new ShoppingListItemTranslation()));
         SLITranslationFirst.setShoppingListItem(shoppingListItemFirst);
         List<ShoppingListItemTranslation> shoppingListItemTranslationList = List.of(SLITranslationFirst);
         Long habitId = 2L;
@@ -474,19 +518,22 @@ public class ShoppingListItemServiceImplTest {
         userShoppingListItemList.add(userShoppingListItem);
         userShoppingListItem.setId(1L);
         userShoppingListItem.setHabitAssign(habitAssign);
-        userShoppingListItem.setShoppingListItem(new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
+        userShoppingListItem.setShoppingListItem(
+            new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
         habit.setShoppingListItems(Set.of(shoppingListItemFirst));
         habitAssign.setUserShoppingListItems(userShoppingListItemList);
-        List<UserShoppingListItemResponseDto> mockItemDtos = List.of(new UserShoppingListItemResponseDto(1L, "Swedish cellulose dish cloths", ShoppingListItemStatus.ACTIVE));
+        List<UserShoppingListItemResponseDto> mockItemDtos = List.of(
+            new UserShoppingListItemResponseDto(1L, "Swedish cellulose dish cloths", ShoppingListItemStatus.ACTIVE));
 
         when(habitAssignRepo.findById(habitAssignId)).thenReturn(Optional.of(habitAssign));
         when(userShoppingListItemRepo.findAllByHabitAssingId(habitAssignId)).thenReturn(userShoppingListItemList);
         for (UserShoppingListItemResponseDto mockDto : mockItemDtos) {
             when(shoppingListItemTranslationRepo.findByLangAndUserShoppingListItemId(language, mockDto.getId()))
-                    .thenReturn(SLITranslationFirst);
+                .thenReturn(SLITranslationFirst);
         }
 
-        List<UserShoppingListItemResponseDto> result = shoppingListItemService.getUserShoppingListByHabitAssignId(userId, habitAssignId, language);
+        List<UserShoppingListItemResponseDto> result =
+            shoppingListItemService.getUserShoppingListByHabitAssignId(userId, habitAssignId, language);
 
         assertEquals(mockItemDtos, result);
     }
@@ -499,7 +546,8 @@ public class ShoppingListItemServiceImplTest {
         Habit habit = new Habit();
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(habit), List.of(new ShoppingListItemTranslation()));
+        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(habit), List.of(new ShoppingListItemTranslation()));
         SLITranslationFirst.setShoppingListItem(shoppingListItemFirst);
         List<ShoppingListItemTranslation> shoppingListItemTranslationList = List.of(SLITranslationFirst);
         Long habitId = 2L;
@@ -519,13 +567,18 @@ public class ShoppingListItemServiceImplTest {
         userShoppingListItem.setId(1L);
         userShoppingListItem.setHabitAssign(habitAssign);
         userShoppingListItem.setStatus(ShoppingListItemStatus.INPROGRESS);
-        userShoppingListItem.setShoppingListItem(new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
+        userShoppingListItem.setShoppingListItem(
+            new ShoppingListItem(1L, List.of(userShoppingListItem), Set.of(habit), shoppingListItemTranslationList));
         habit.setShoppingListItems(Set.of(shoppingListItemFirst));
         habitAssign.setUserShoppingListItems(userShoppingListItemList);
-        List<UserShoppingListItemResponseDto> expected = List.of(new UserShoppingListItemResponseDto(1L, "Swedish cellulose dish cloths", ShoppingListItemStatus.INPROGRESS));
-        when(userShoppingListItemRepo.findUserShoppingListItemsByHabitAssignIdAndStatusInProgress(habitAssignId)).thenReturn(userShoppingListItemList);
-        when(shoppingListItemTranslationRepo.findByLangAndUserShoppingListItemId(language, 1L)).thenReturn(SLITranslationFirst);
-        List<UserShoppingListItemResponseDto> result = shoppingListItemService.getUserShoppingListItemsByHabitAssignIdAndStatusInProgress(habitAssignId, language);
+        List<UserShoppingListItemResponseDto> expected = List.of(new UserShoppingListItemResponseDto(1L,
+            "Swedish cellulose dish cloths", ShoppingListItemStatus.INPROGRESS));
+        when(userShoppingListItemRepo.findUserShoppingListItemsByHabitAssignIdAndStatusInProgress(habitAssignId))
+            .thenReturn(userShoppingListItemList);
+        when(shoppingListItemTranslationRepo.findByLangAndUserShoppingListItemId(language, 1L))
+            .thenReturn(SLITranslationFirst);
+        List<UserShoppingListItemResponseDto> result =
+            shoppingListItemService.getUserShoppingListItemsByHabitAssignIdAndStatusInProgress(habitAssignId, language);
 
         assertEquals(expected, result);
     }
@@ -557,7 +610,8 @@ public class ShoppingListItemServiceImplTest {
         when(habitAssignRepo.findByHabitIdAndUserId(habitId, userId)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class,
-                () -> shoppingListItemService.deleteUserShoppingListItemByItemIdAndUserIdAndHabitId(itemId, userId, habitId));
+            () -> shoppingListItemService.deleteUserShoppingListItemByItemIdAndUserIdAndHabitId(itemId, userId,
+                habitId));
     }
 
     @Test
@@ -568,27 +622,32 @@ public class ShoppingListItemServiceImplTest {
         Habit habit = new Habit();
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(habit), List.of(new ShoppingListItemTranslation()));
+        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(habit), List.of(new ShoppingListItemTranslation()));
         SLITranslationFirst.setShoppingListItem(shoppingListItemFirst);
         UserShoppingListItem mockUserShoppingListItem = new UserShoppingListItem();
         mockUserShoppingListItem.setId(userId);
         mockUserShoppingListItem.setStatus(ShoppingListItemStatus.ACTIVE);
         when(userShoppingListItemRepo.getOne(itemId)).thenReturn(mockUserShoppingListItem);
-        when(shoppingListItemTranslationRepo.findByLangAndUserShoppingListItemId(language, userId)).thenReturn(SLITranslationFirst);
+        when(shoppingListItemTranslationRepo.findByLangAndUserShoppingListItemId(language, userId))
+            .thenReturn(SLITranslationFirst);
         UserShoppingListItemResponseDto expectedDto = new UserShoppingListItemResponseDto();
         expectedDto.setId(1L);
         expectedDto.setText("Swedish cellulose dish cloths");
         expectedDto.setStatus(ShoppingListItemStatus.DONE);
-        UserShoppingListItemResponseDto resultFirst = shoppingListItemService.updateUserShopingListItemStatus(userId, itemId, language);
+        UserShoppingListItemResponseDto resultFirst =
+            shoppingListItemService.updateUserShopingListItemStatus(userId, itemId, language);
         assertNotNull(resultFirst);
         assertEquals(expectedDto, resultFirst);
         assertEquals(ShoppingListItemStatus.DONE, mockUserShoppingListItem.getStatus());
         assertNotNull(mockUserShoppingListItem.getDateCompleted());
         Mockito.verify(userShoppingListItemRepo, Mockito.times(1)).save(mockUserShoppingListItem);
 
-        when(userShoppingListItemRepo.getAllByUserShoppingListIdAndUserId(itemId, userId)).thenReturn(List.of(mockUserShoppingListItem));
+        when(userShoppingListItemRepo.getAllByUserShoppingListIdAndUserId(itemId, userId))
+            .thenReturn(List.of(mockUserShoppingListItem));
 
-        List<UserShoppingListItemResponseDto> resultSecond = shoppingListItemService.updateUserShoppingListItemStatus(userId, itemId, language, "inProgress");
+        List<UserShoppingListItemResponseDto> resultSecond =
+            shoppingListItemService.updateUserShoppingListItemStatus(userId, itemId, language, "inProgress");
         expectedDto.setStatus(ShoppingListItemStatus.INPROGRESS);
 
         assertEquals(expectedDto, resultSecond.get(0));
@@ -599,8 +658,8 @@ public class ShoppingListItemServiceImplTest {
     void deleteUserShoppingListItemsTest() {
         String ids = "1,2,3";
         List<Long> arrayId = Arrays.stream(ids.split(","))
-                .map(Long::valueOf)
-                .collect(Collectors.toList());
+            .map(Long::valueOf)
+            .collect(Collectors.toList());
         List<Long> expected = Arrays.asList(1L, 2L, 3L);
         UserShoppingListItem userShoppingListItem = new UserShoppingListItem();
 
@@ -624,8 +683,8 @@ public class ShoppingListItemServiceImplTest {
         when(shoppingListItemRepo.getShoppingListByListOfId(idList)).thenReturn(mockShoppingListItems);
 
         List<ShoppingListItemManagementDto> expectedDtos = mockShoppingListItems.stream()
-                .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
-                .collect(Collectors.toList());
+            .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
+            .collect(Collectors.toList());
         List<ShoppingListItemManagementDto> result = shoppingListItemService.getShoppingListByHabitId(habitId);
 
         assertEquals(expectedDtos, result);
@@ -637,24 +696,23 @@ public class ShoppingListItemServiceImplTest {
         Pageable pageable = Mockito.mock(Pageable.class);
         List<Long> mockItemIds = List.of(1L, 2L, 3L);
         List<ShoppingListItem> mockItems = List.of(
-                new ShoppingListItem(),
-                new ShoppingListItem(),
-                new ShoppingListItem()
-        );
+            new ShoppingListItem(),
+            new ShoppingListItem(),
+            new ShoppingListItem());
         Page<ShoppingListItem> mockPage = new PageImpl<>(mockItems, pageable, mockItems.size());
 
         when(shoppingListItemRepo.getAllShoppingListItemsByHabitIdNotContained(habitId)).thenReturn(mockItemIds);
         when(shoppingListItemRepo.getShoppingListByListOfIdPageable(mockItemIds, pageable)).thenReturn(mockPage);
 
         List<ShoppingListItemManagementDto> expectedDtos = mockItems.stream()
-                .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
-                .collect(Collectors.toList());
+            .map(item -> modelMapper.map(item, ShoppingListItemManagementDto.class))
+            .collect(Collectors.toList());
         PageableAdvancedDto<ShoppingListItemManagementDto> expectedDtoPage =
-                new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
-                        mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
-                        mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
+            new PageableAdvancedDto<>(expectedDtos, mockPage.getTotalElements(), mockPage.getPageable().getPageNumber(),
+                mockPage.getTotalPages(), mockPage.getNumber(), mockPage.hasPrevious(),
+                mockPage.hasNext(), mockPage.isFirst(), mockPage.isLast());
         PageableAdvancedDto<ShoppingListItemManagementDto> result =
-                shoppingListItemService.findAllShoppingListItemsForManagementPageNotContained(habitId, pageable);
+            shoppingListItemService.findAllShoppingListItemsForManagementPageNotContained(habitId, pageable);
 
         assertEquals(expectedDtoPage, result);
     }
@@ -666,21 +724,23 @@ public class ShoppingListItemServiceImplTest {
         Habit habit = new Habit();
         var SLITranslationFirst = new ShoppingListItemTranslation();
         SLITranslationFirst.setContent("Swedish cellulose dish cloths");
-        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()), Set.of(habit), List.of(new ShoppingListItemTranslation()));
+        ShoppingListItem shoppingListItemFirst = new ShoppingListItem(1L, List.of(new UserShoppingListItem()),
+            Set.of(habit), List.of(new ShoppingListItemTranslation()));
         SLITranslationFirst.setShoppingListItem(shoppingListItemFirst);
         List<ShoppingListItemTranslation> mockTranslations = List.of(SLITranslationFirst);
 
         when(shoppingListItemRepo.findInProgressByUserIdAndLanguageCode(userId, languageCode))
-                .thenReturn(mockTranslations);
+            .thenReturn(mockTranslations);
 
         List<ShoppingListItemDto> expectedDtos = mockTranslations.stream()
-                .map(trans -> {
-                    ShoppingListItemDto dto = modelMapper.map(trans, ShoppingListItemDto.class);
-                    dto.setStatus(ShoppingListItemStatus.INPROGRESS.toString());
-                    return dto;
-                })
-                .collect(Collectors.toList());
-        List<ShoppingListItemDto> result = shoppingListItemService.findInProgressByUserIdAndLanguageCode(userId, languageCode);
+            .map(trans -> {
+                ShoppingListItemDto dto = modelMapper.map(trans, ShoppingListItemDto.class);
+                dto.setStatus(ShoppingListItemStatus.INPROGRESS.toString());
+                return dto;
+            })
+            .collect(Collectors.toList());
+        List<ShoppingListItemDto> result =
+            shoppingListItemService.findInProgressByUserIdAndLanguageCode(userId, languageCode);
 
         assertEquals(expectedDtos, result);
     }

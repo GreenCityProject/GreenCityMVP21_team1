@@ -39,9 +39,11 @@ public class HabitStatusCalendarServiceImplTest {
         HabitAssign habitAssign = new HabitAssign();
 
         Mockito.when(modelMapper.map(habitAssignVO, HabitAssign.class)).thenReturn(habitAssign);
-        Mockito.when(habitStatusCalendarRepo.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssign)).thenReturn(null);
+        Mockito.when(habitStatusCalendarRepo.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssign))
+            .thenReturn(null);
 
-        Assertions.assertNull(habitStatusCalendarService.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssignVO));
+        Assertions.assertNull(
+            habitStatusCalendarService.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssignVO));
     }
 
     @Test
@@ -52,9 +54,11 @@ public class HabitStatusCalendarServiceImplTest {
         HabitStatusCalendar habitStatusCalendar = new HabitStatusCalendar();
 
         Mockito.when(modelMapper.map(habitAssignVO, HabitAssign.class)).thenReturn(habitAssign);
-        Mockito.when(habitStatusCalendarRepo.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssign)).thenReturn(habitStatusCalendar);
+        Mockito.when(habitStatusCalendarRepo.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssign))
+            .thenReturn(habitStatusCalendar);
         HabitStatusCalendarVO result = modelMapper.map(habitStatusCalendar, HabitStatusCalendarVO.class);
-        Assertions.assertEquals(result, habitStatusCalendarService.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssignVO));
+        Assertions.assertEquals(result,
+            habitStatusCalendarService.findHabitStatusCalendarByEnrollDateAndHabitAssign(date, habitAssignVO));
     }
 
     @Test
@@ -89,9 +93,9 @@ public class HabitStatusCalendarServiceImplTest {
     }
 
     @Test
-    void findEnrolledDatesAfter_returnListEnrolledDatesAfter(){
+    void findEnrolledDatesAfter_returnListEnrolledDatesAfter() {
 
-        LocalDate date = LocalDate.of(2024, 2,28);
+        LocalDate date = LocalDate.of(2024, 2, 28);
         HabitAssignVO habitAssignVO = new HabitAssignVO();
         HabitAssign habitAssign = new HabitAssign();
 
@@ -102,14 +106,15 @@ public class HabitStatusCalendarServiceImplTest {
         List<LocalDate> expectedDates = new LinkedList<>();
         expectedDates.add(date);
 
-        Mockito.when(modelMapper.map(habitAssignVO,HabitAssign.class)).thenReturn(habitAssign);
-        Mockito.when(habitStatusCalendarRepo.findAllByEnrollDateAfterAndHabitAssign(date,habitAssign)).thenReturn(habitStatusCalendars);
-        Assertions.assertEquals(expectedDates,habitStatusCalendarService.findEnrolledDatesAfter(date,habitAssignVO));
+        Mockito.when(modelMapper.map(habitAssignVO, HabitAssign.class)).thenReturn(habitAssign);
+        Mockito.when(habitStatusCalendarRepo.findAllByEnrollDateAfterAndHabitAssign(date, habitAssign))
+            .thenReturn(habitStatusCalendars);
+        Assertions.assertEquals(expectedDates, habitStatusCalendarService.findEnrolledDatesAfter(date, habitAssignVO));
     }
 
     @Test
-    void findEnrolledDatesBefore_returnListEnrolledDatesBefore(){
-        LocalDate date = LocalDate.of(2024,02,28);
+    void findEnrolledDatesBefore_returnListEnrolledDatesBefore() {
+        LocalDate date = LocalDate.of(2024, 02, 28);
         HabitAssignVO habitAssignVO = new HabitAssignVO();
         HabitAssign habitAssign = new HabitAssign();
 
@@ -120,21 +125,20 @@ public class HabitStatusCalendarServiceImplTest {
         List<LocalDate> expectedDates = new LinkedList<>();
         expectedDates.add(date);
 
-        Mockito.when(modelMapper.map(habitAssignVO,HabitAssign.class)).thenReturn(habitAssign);
-        Mockito.when(habitStatusCalendarRepo.findAllByEnrollDateBeforeAndHabitAssign(date,habitAssign)).thenReturn(habitStatusCalendars);
-        Assertions.assertEquals(expectedDates,habitStatusCalendarService.findEnrolledDatesBefore(date,habitAssignVO));
+        Mockito.when(modelMapper.map(habitAssignVO, HabitAssign.class)).thenReturn(habitAssign);
+        Mockito.when(habitStatusCalendarRepo.findAllByEnrollDateBeforeAndHabitAssign(date, habitAssign))
+            .thenReturn(habitStatusCalendars);
+        Assertions.assertEquals(expectedDates, habitStatusCalendarService.findEnrolledDatesBefore(date, habitAssignVO));
     }
 
     @Test
-    void deleteAllByHabitAssign_allHabitStatusCalendarIsDeleted(){
+    void deleteAllByHabitAssign_allHabitStatusCalendarIsDeleted() {
         HabitAssignVO habitAssignVO = new HabitAssignVO();
         HabitAssign habitAssign = new HabitAssign();
 
-        Mockito.when(modelMapper.map(habitAssignVO,HabitAssign.class)).thenReturn(habitAssign);
+        Mockito.when(modelMapper.map(habitAssignVO, HabitAssign.class)).thenReturn(habitAssign);
         habitStatusCalendarService.deleteAllByHabitAssign(habitAssignVO);
         Mockito.verify(habitStatusCalendarRepo, Mockito.times(1)).deleteAllByHabitAssign(habitAssign);
     }
-
-
 
 }
