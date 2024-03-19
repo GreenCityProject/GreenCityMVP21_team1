@@ -37,7 +37,7 @@ public class EventController {
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = HttpStatuses.CREATED,
             content = @Content(schema = @Schema(implementation = EventDto.class))),
     })
-    @PostMapping(path = "/create-event", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventDtoResponse> save(
             @RequestPart @Valid EventDtoRequest eventDtoRequest,
             @Parameter(description = "Image of event")
