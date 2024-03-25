@@ -1,13 +1,11 @@
 package greencity.dto.event;
 
-import greencity.dto.user.AuthorDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -22,31 +20,23 @@ public class EventDtoRequest {
     public static final int MAX_TITLE_LENGTH = 70;
     @NotEmpty
     @Length(max = MAX_TITLE_LENGTH)
-    private String eventTitle;
-
-
-    @NotEmpty
-    private String location;
-
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
-
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate finishDate;
-
-    @NotNull
-    private Integer duration;
+    private String title;
 
     @NotEmpty
     @Length(min = MIN_DESCRIPTION_LENGTH, max = MAX_DESCRIPTION_LENGTH)
     private String description;
 
+    @NotNull
+    private Boolean open = true;
+
+
     @NotEmpty
-    private String image;
+    private List<DatesLocationDto> datesLocations;
+
 
     @NotNull
-    private AuthorDto author;
+    private List <String> tags;
+
+
 
 }

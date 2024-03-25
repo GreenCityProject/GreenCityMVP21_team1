@@ -1,16 +1,13 @@
 package greencity.dto.event;
 
 
-import greencity.dto.user.AuthorDto;
+import greencity.dto.tag.TagDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,32 +28,26 @@ public class EventDto {
 
     @NotEmpty
     @Length(max = MAX_TITLE_LENGTH)
-    private String eventTitle;
-
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
-
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate finishDate;
-
-    @NotNull
-    private Integer duration;
-
-    @NotEmpty
-    private String location;
+    private String title;
 
     @NotEmpty
     @Length(min = MIN_DESCRIPTION_LENGTH, max = MAX_DESCRIPTION_LENGTH)
     private String description;
 
-    @NotEmpty
-    private String status;
+    @NotNull
+    private Boolean open = true;
 
     @NotEmpty
-    private String image;
+    private List<DatesLocationDto> datesLocationDtos;
 
     @NotNull
-    private AuthorDto author;
+    private List <String>  tags;
+
+
+
+    //{"title":"Test"
+    // ,"description":"<p>jhvblkjbk;jhbjvhjckhbkjnkjhjhvhgchcjbk</p>"
+    // ,"open":true,
+    // "datesLocations":[{"startDate":"2024-03-25T18:00:00Z","finishDate":"2024-03-25T20:00:00Z","coordinates":{"latitude":50.38616051958162,"longitude":30.43901304687499}}],
+    // "tags":["Environmental"]}
 }
