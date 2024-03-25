@@ -39,11 +39,11 @@ public class EventController {
     })
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventDtoResponse> save(
-            @RequestPart @Valid EventDtoRequest eventDtoRequest,
+            @RequestPart @Valid EventDtoRequest addEventDtoRequest,
             @Parameter(description = "Image of event")
             @ImageValidation @RequestPart(required = false, name = "image") MultipartFile image,
             @Parameter(hidden = true) Principal principal) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                eventService.save(eventDtoRequest, image, principal.getName()));
+                eventService.save(addEventDtoRequest, image, principal.getName()));
     }
 }
