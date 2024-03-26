@@ -4,9 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-
 import java.util.List;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +12,6 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 public class AddEventDtoRequest {
-
     public static final int MIN_DESCRIPTION_LENGTH = 20;
     public static final int MAX_DESCRIPTION_LENGTH = 63_206;
     public static final int MAX_TITLE_LENGTH = 70;
@@ -29,14 +26,9 @@ public class AddEventDtoRequest {
     @NotNull
     private Boolean open = true;
 
-
     @NotEmpty
     private List<DatesLocationDto> datesLocations;
 
-
     @NotNull
-    private List <String> tags;
-
-
-
+    private List<String> tags;
 }

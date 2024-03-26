@@ -17,14 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-
     private final EventRepo eventRepo;
     private final ModelMapper modelMapper;
     private final RestClient restClient;
@@ -43,14 +41,15 @@ public class EventServiceImpl implements EventService {
             newEventToSave.setImage(imageFile);
             newEventToSave.setDescription(addEventDtoRequest.getDescription());
             newEventToSave.setOpen(addEventDtoRequest.getOpen());
-            List<TagVO> tagsByNamesAndType = tagsService.findTagsByNamesAndType(addEventDtoRequest.getTags(), TagType.EVENT);
+            List<TagVO> tagsByNamesAndType =
+                tagsService.findTagsByNamesAndType(addEventDtoRequest.getTags(), TagType.EVENT);
             List<Tag> tags = tagsByNamesAndType.stream()
-                    .map(tagVO -> modelMapper.map(tagVO, Tag.class)).toList();
+                .map(tagVO -> modelMapper.map(tagVO, Tag.class)).toList();
             newEventToSave.setTags(tags);
             List<DateLocation> dateLocationList = addEventDtoRequest.getDatesLocations()
-                    .stream()
-                    .map(datesLocations -> modelMapper.map(datesLocations, DateLocation.class))
-                    .toList();
+                .stream()
+                .map(datesLocations -> modelMapper.map(datesLocations, DateLocation.class))
+                .toList();
             newEventToSave.setDateLocation(dateLocationList);
             Event savedEvent = eventRepo.save(newEventToSave);
 
@@ -59,6 +58,5 @@ public class EventServiceImpl implements EventService {
             log.error("Event can't be saved. eventDtoRequest: {}", addEventDtoRequest, e);
             throw new NotSavedException("Event can't be saved");
         }
-
     }
 }

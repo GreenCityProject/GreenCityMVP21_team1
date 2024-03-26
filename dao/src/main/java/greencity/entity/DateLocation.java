@@ -2,7 +2,6 @@ package greencity.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -35,6 +34,4 @@ public class DateLocation {
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
-
-
 }

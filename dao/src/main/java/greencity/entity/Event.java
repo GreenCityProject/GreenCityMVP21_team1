@@ -3,7 +3,6 @@ package greencity.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
 import java.util.List;
 
 @Entity
@@ -17,7 +16,8 @@ import java.util.List;
 @EqualsAndHashCode(exclude = {"author", "tags"})
 
 public class Event {
-    private final static Boolean EVENT_DEFAULT_STATUS = true;
+    private static final Boolean EVENT_DEFAULT_STATUS = true;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -42,13 +42,11 @@ public class Event {
 
     @ManyToMany
     @JoinTable(name = "events_tags",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+        joinColumns = @JoinColumn(name = "event_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 
     @ManyToOne
     @JoinColumn(name = "author")
     private User author;
-
-
 }

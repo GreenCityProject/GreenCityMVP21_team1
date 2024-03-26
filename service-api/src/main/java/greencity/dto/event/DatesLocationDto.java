@@ -3,7 +3,6 @@ package greencity.dto.event;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -12,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode
 public class DatesLocationDto {
-
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private LocalDateTime startDate;
 
@@ -21,6 +19,4 @@ public class DatesLocationDto {
 
     @NotNull
     private CoordinatesDto coordinates;
-
-
 }
