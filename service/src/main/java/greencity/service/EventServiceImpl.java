@@ -1,6 +1,7 @@
 package greencity.service;
 
 import greencity.client.RestClient;
+import greencity.dto.event.EventDto;
 import greencity.dto.event.EventDtoRequest;
 import greencity.dto.event.EventDtoResponse;
 import greencity.dto.tag.TagVO;
@@ -34,7 +35,7 @@ public class EventServiceImpl implements EventService {
     private final FileService fileService;
 
     @Override
-    public EventDtoResponse save(EventDtoRequest eventDtoRequest, MultipartFile image, String email) {
+    public EventDto save(EventDtoRequest eventDtoRequest, MultipartFile image, String email) {
         try {
             Event newEventToSave = modelMapper.map(eventDtoRequest, Event.class);
             UserVO userVObyEmail = restClient.findByEmail(email);
@@ -56,7 +57,7 @@ public class EventServiceImpl implements EventService {
             newEventToSave.setDateLocation(dateLocationList);
             Event savedEvent = eventRepo.save(newEventToSave);
 
-            return modelMapper.map(savedEvent, EventDtoResponse.class);
+            return modelMapper.map(savedEvent, EventDto.class);
         } catch (NotSavedException e) {
             log.error("Event can't be saved. eventDtoRequest: {}", eventDtoRequest, e);
             throw new NotSavedException("Event can't be saved");

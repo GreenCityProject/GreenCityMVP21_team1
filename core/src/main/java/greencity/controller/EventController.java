@@ -38,7 +38,7 @@ public class EventController {
             content = @Content(schema = @Schema(implementation = EventDto.class))),
     })
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<EventDtoResponse> save(
+    public ResponseEntity<EventDto> save(
             @RequestPart @Valid EventDtoRequest addEventDtoRequest,
             @Parameter(description = "Image of event")
             @ImageValidation @RequestPart(required = false, name = "image") MultipartFile image,
