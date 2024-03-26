@@ -2,11 +2,8 @@ package greencity.controller;
 
 import greencity.annotations.ImageValidation;
 import greencity.constant.HttpStatuses;
-import greencity.constant.SwaggerExampleModel;
-import greencity.dto.econews.EcoNewsGenericDto;
 import greencity.dto.event.EventDto;
-import greencity.dto.event.EventDtoRequest;
-import greencity.dto.event.EventDtoResponse;
+import greencity.dto.event.AddEventDtoRequest;
 import greencity.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +36,7 @@ public class EventController {
     })
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventDto> save(
-            @RequestPart @Valid EventDtoRequest addEventDtoRequest,
+            @RequestPart @Valid AddEventDtoRequest addEventDtoRequest,
             @Parameter(description = "Image of event")
             @ImageValidation @RequestPart(required = false, name = "image") MultipartFile image,
             @Parameter(hidden = true) Principal principal) {

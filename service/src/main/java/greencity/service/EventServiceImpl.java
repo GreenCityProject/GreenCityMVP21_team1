@@ -2,8 +2,7 @@ package greencity.service;
 
 import greencity.client.RestClient;
 import greencity.dto.event.EventDto;
-import greencity.dto.event.EventDtoRequest;
-import greencity.dto.event.EventDtoResponse;
+import greencity.dto.event.AddEventDtoRequest;
 import greencity.dto.tag.TagVO;
 import greencity.dto.user.UserVO;
 import greencity.entity.DateLocation;
@@ -19,9 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Period;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,22 +32,22 @@ public class EventServiceImpl implements EventService {
     private final FileService fileService;
 
     @Override
-    public EventDto save(EventDtoRequest eventDtoRequest, MultipartFile image, String email) {
+    public EventDto save(AddEventDtoRequest addEventDtoRequest, MultipartFile image, String email) {
         try {
-            Event newEventToSave = modelMapper.map(eventDtoRequest, Event.class);
+            Event newEventToSave = modelMapper.map(addEventDtoRequest, Event.class);
             UserVO userVObyEmail = restClient.findByEmail(email);
             User user = modelMapper.map(userVObyEmail, greencity.entity.User.class);
             newEventToSave.setAuthor(user);
-            newEventToSave.setTitle(eventDtoRequest.getTitle());
+            newEventToSave.setTitle(addEventDtoRequest.getTitle());
             String imageFile = fileService.upload(image);
             newEventToSave.setImage(imageFile);
-            newEventToSave.setDescription(eventDtoRequest.getDescription());
-            newEventToSave.setOpen(eventDtoRequest.getOpen());
-            List<TagVO> tagsByNamesAndType = tagsService.findTagsByNamesAndType(eventDtoRequest.getTags(), TagType.EVENT);
+            newEventToSave.setDescription(addEventDtoRequest.getDescription());
+            newEventToSave.setOpen(addEventDtoRequest.getOpen());
+            List<TagVO> tagsByNamesAndType = tagsService.findTagsByNamesAndType(addEventDtoRequest.getTags(), TagType.EVENT);
             List<Tag> tags = tagsByNamesAndType.stream()
                     .map(tagVO -> modelMapper.map(tagVO, Tag.class)).toList();
             newEventToSave.setTags(tags);
-            List<DateLocation> dateLocationList = eventDtoRequest.getDatesLocations()
+            List<DateLocation> dateLocationList = addEventDtoRequest.getDatesLocations()
                     .stream()
                     .map(datesLocations -> modelMapper.map(datesLocations, DateLocation.class))
                     .toList();
@@ -59,7 +56,7 @@ public class EventServiceImpl implements EventService {
 
             return modelMapper.map(savedEvent, EventDto.class);
         } catch (NotSavedException e) {
-            log.error("Event can't be saved. eventDtoRequest: {}", eventDtoRequest, e);
+            log.error("Event can't be saved. eventDtoRequest: {}", addEventDtoRequest, e);
             throw new NotSavedException("Event can't be saved");
         }
 

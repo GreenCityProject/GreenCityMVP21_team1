@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class EventDtoRequest {
+public class AddEventDtoRequest {
 
     public static final int MIN_DESCRIPTION_LENGTH = 20;
     public static final int MAX_DESCRIPTION_LENGTH = 63_206;
