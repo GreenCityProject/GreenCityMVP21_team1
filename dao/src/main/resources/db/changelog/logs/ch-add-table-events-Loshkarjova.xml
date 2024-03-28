@@ -5,7 +5,7 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="Loshkarjova-1" author="Kateryna Loshkarjova">
-        <validCheckSum>9:377ecf7614b55b91f267385ef8e8b971</validCheckSum>
+        <validCheckSum>9:c3851bc652dd83f05d48f667ae2334e2</validCheckSum>
 
         <createTable tableName="events">
             <column name="id" autoIncrement="true" type="BIGINT">
