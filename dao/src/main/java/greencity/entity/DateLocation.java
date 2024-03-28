@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @Table(name = "dates_locations")
-@ToString
+@ToString(exclude = "event")
 @EqualsAndHashCode
 public class DateLocation {
     @Id

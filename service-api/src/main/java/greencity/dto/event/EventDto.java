@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "author")
+@ToString(exclude = "datesLocationDtos")
 @Builder
 @EqualsAndHashCode
 public class EventDto {

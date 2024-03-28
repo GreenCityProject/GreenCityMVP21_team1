@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class DatesLocationDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private LocalDateTime startDate;

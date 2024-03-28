@@ -3,6 +3,7 @@ package greencity.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.List;
 @Setter
 @Builder
 @Table(name = "events")
-@ToString(exclude = {"author", "tags"})
+@ToString(exclude = {"author", "tags", "dateLocation"})
 @EqualsAndHashCode(exclude = {"author", "tags"})
 
 public class Event {
@@ -42,8 +43,8 @@ public class Event {
 
     @ManyToMany
     @JoinTable(name = "events_tags",
-        joinColumns = @JoinColumn(name = "event_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 
     @ManyToOne
