@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="Loshkarjova-1" author="Kateryna Loshkarjova">
+        <validCheckSum>9:377ecf7614b55b91f267385ef8e8b971</validCheckSum>
+
+        <createTable tableName="events">
+            <column name="id" autoIncrement="true" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR"/>
+            <column name="description" type="VARCHAR"/>
+            <column name="author" type="BIGINT">
+                <constraints foreignKeyName="FK_events_users" references="users (id)"/>
+            </column>
+            <column name="image" type="VARCHAR"/>
+            <column name="open" type="BOOLEAN"/>
+        </createTable>
+
+
+        <createTable tableName="dates_locations">
+            <column name="id" autoIncrement="true" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="start_date" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="finish_date" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>
+            <column name="event_id" type="BIGINT">
+                <constraints foreignKeyName="FK_events_dates_locations" references="events (id)"/>
+            </column>
+
+        </createTable>
+
+
+        <createTable tableName="events_tags">
+            <column name="event_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="events_tags"
+                                 constraintName="event_id_to_event_fk" referencedColumnNames="id"
+                                 referencedTableName="events"/>
+        <addForeignKeyConstraint baseColumnNames="tag_id" baseTableName="events_tags"
+                                 constraintName="event_tag_id_to_tag_fk" referencedColumnNames="id"
+                                 referencedTableName="tags"/>
+
+    </changeSet>
+</databaseChangeLog>

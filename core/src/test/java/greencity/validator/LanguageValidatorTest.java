@@ -20,16 +20,15 @@ class LanguageValidatorTest {
     private LanguageValidator languageValidator;
     @Mock
     private LanguageService languageService;
+
     @BeforeEach
-    void setUp(){
+    void setUp() {
         List<String> codes = Arrays.asList("en", "ua");
 
         when(languageService.findAllLanguageCodes()).thenReturn(codes);
 
         languageValidator.initialize(null);
     }
-
-
 
     @Test
     void isValidTrueTest() {

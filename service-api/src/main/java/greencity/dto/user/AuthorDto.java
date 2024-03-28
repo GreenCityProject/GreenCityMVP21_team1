@@ -14,5 +14,5 @@ public class AuthorDto {
     private Long id;
 
     @NotEmpty
-    private String name;
+    private String email;
 }
