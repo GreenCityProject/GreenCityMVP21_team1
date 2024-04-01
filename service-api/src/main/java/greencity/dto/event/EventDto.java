@@ -1,5 +1,6 @@
 package greencity.dto.event;
 
+import greencity.dto.tag.TagUaEnDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -37,5 +38,5 @@ public class EventDto {
     private List<DatesLocationDto> datesLocationDtos;
 
     @NotNull
-    private List<String> tags;
+    private List<TagUaEnDto> tags;
 }

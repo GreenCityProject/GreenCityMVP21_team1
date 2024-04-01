@@ -5,6 +5,7 @@ import greencity.dto.event.CoordinatesDto;
 import greencity.dto.event.DatesLocationDto;
 import greencity.dto.event.EventDto;
 import greencity.dto.event.AddEventDtoRequest;
+import greencity.dto.tag.TagUaEnDto;
 import greencity.dto.tag.TagVO;
 import greencity.dto.user.UserVO;
 import greencity.entity.DateLocation;
@@ -13,6 +14,9 @@ import greencity.entity.Tag;
 import greencity.entity.User;
 import greencity.enums.TagType;
 import greencity.exception.exceptions.NotSavedException;
+import greencity.mapping.TagMapper;
+import greencity.mapping.TagUaEnDtoMapper;
+import greencity.mapping.TagVOMapper;
 import greencity.repository.DatesLocationRepo;
 import greencity.repository.EventRepo;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,8 @@ public class EventServiceImpl implements EventService {
     private final TagsService tagsService;
     private final FileService fileService;
     private final DatesLocationRepo datesLocationRepo;
+    private final TagUaEnDtoMapper tagUaEnDtoMapper;
+    private final TagMapper tagMapper;
 
     @Override
     public EventDto save(AddEventDtoRequest addEventDtoRequest, MultipartFile image, String email) {
@@ -46,11 +52,12 @@ public class EventServiceImpl implements EventService {
             newEventToSave.setImage(imageFile);
             newEventToSave.setDescription(addEventDtoRequest.getDescription());
             newEventToSave.setOpen(addEventDtoRequest.getOpen());
-            List<TagVO> tagsByNamesAndType =
-                    tagsService.findTagsByNamesAndType(addEventDtoRequest.getTags(), TagType.EVENT);
-            List<Tag> tags = tagsByNamesAndType.stream()
-                    .map(tagVO -> modelMapper.map(tagVO, Tag.class)).toList();
+            List<String> listTags = addEventDtoRequest.getTags();
+            List<TagVO> listTagVO = tagsService.findTagsWithAllTranslationsByNamesAndType(listTags, TagType.EVENT);
+            List<Tag> tags = tagMapper.mapAllToList(listTagVO);
             newEventToSave.setTags(tags);
+            List<TagUaEnDto> tagUaEnDtoList = tagUaEnDtoMapper.mapAllToList(listTagVO);
+
             List<DatesLocationDto> listDatesLocationsDto = addEventDtoRequest.getDatesLocations();
             List<CoordinatesDto> coordinatesDtoList = listDatesLocationsDto
                     .stream()
@@ -73,6 +80,7 @@ public class EventServiceImpl implements EventService {
             log.info("savedEvent: {}", savedEvent);
             EventDto map = modelMapper.map(savedEvent, EventDto.class);
             map.setDatesLocationDtos(listDatesLocationsDto);
+            map.setTags(tagUaEnDtoList);
             return map;
         } catch (NotSavedException e) {
             log.error("Event can't be saved. eventDtoRequest: {}", addEventDtoRequest, e);
