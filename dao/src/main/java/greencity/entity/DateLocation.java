@@ -3,6 +3,7 @@ package greencity.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -20,10 +21,10 @@ public class DateLocation {
     private Long id;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private OffsetDateTime startDate;
 
     @Column(name = "finish_date")
-    private LocalDateTime finishDate;
+    private OffsetDateTime finishDate;
 
     @Column(name = "latitude")
     private Double latitude;

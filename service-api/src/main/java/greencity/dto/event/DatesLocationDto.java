@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,11 +13,11 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 public class DatesLocationDto {
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    private LocalDateTime startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssxxx")
+    private OffsetDateTime startDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    private LocalDateTime finishDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssxxx")
+    private OffsetDateTime finishDate;
 
     @NotNull
     private CoordinatesDto coordinates;
