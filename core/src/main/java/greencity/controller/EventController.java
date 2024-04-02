@@ -1,10 +1,10 @@
 package greencity.controller;
 
 import greencity.annotations.CurrentUser;
-import greencity.annotations.ImageValidation;
 import greencity.constant.HttpStatuses;
 import greencity.dto.event.EventDto;
 import greencity.dto.event.AddEventDtoRequest;
+import greencity.dto.event.PageableAdvancedDtoOfEventDto;
 import greencity.dto.user.UserVO;
 import greencity.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.List;
 
 @Validated
@@ -45,5 +44,16 @@ public class EventController {
             @Parameter(hidden = true) @CurrentUser UserVO userVO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
             eventService.save(addEventDtoRequest, images, userVO.getId()));
+    }
+
+    @GetMapping()
+    @ResponseBody
+    public ResponseEntity<PageableAdvancedDtoOfEventDto> getAll(
+            @RequestParam(defaultValue = "0") Integer page ,
+            @RequestParam Integer size
+            ){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                eventService.getAll(page, size));
+
     }
 }

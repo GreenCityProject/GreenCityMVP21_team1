@@ -1,10 +1,7 @@
 package greencity.service;
 
 import greencity.client.RestClient;
-import greencity.dto.event.CoordinatesDto;
-import greencity.dto.event.DatesLocationDto;
-import greencity.dto.event.EventDto;
-import greencity.dto.event.AddEventDtoRequest;
+import greencity.dto.event.*;
 import greencity.dto.tag.TagUaEnDto;
 import greencity.dto.tag.TagVO;
 import greencity.dto.user.UserVO;
@@ -41,7 +38,7 @@ public class EventServiceImpl implements EventService {
     private final TagMapper tagMapper;
 
     @Override
-    public EventDto save(AddEventDtoRequest addEventDtoRequest,List <MultipartFile> images, Long id) {
+    public EventDto save(AddEventDtoRequest addEventDtoRequest, List<MultipartFile> images, Long id) {
         try {
             Event newEventToSave = modelMapper.map(addEventDtoRequest, Event.class);
             UserVO userVObyId = restClient.findById(id);
@@ -87,5 +84,25 @@ public class EventServiceImpl implements EventService {
             log.error("Event can't be saved. eventDtoRequest: {}", addEventDtoRequest, e);
             throw new NotSavedException("Event can't be saved");
         }
+    }
+
+    @Override
+    public PageableAdvancedDtoOfEventDto getAll(Integer page, Integer size) {
+        List<Event> events = eventRepo.findAll();
+        List<EventDto> eventDtoList = events.stream()
+                .map(event -> modelMapper.map(event, EventDto.class))
+                .toList();
+        Long quantityOfTotalElements = ((long) eventDtoList.size());
+        PageableAdvancedDtoOfEventDto pageableAdvancedDtoOfEventDto = new PageableAdvancedDtoOfEventDto();
+        pageableAdvancedDtoOfEventDto.setPage(eventDtoList);
+        if (quantityOfTotalElements < 1L) {
+            quantityOfTotalElements = 5L;
+        }
+        pageableAdvancedDtoOfEventDto.setTotalElements(quantityOfTotalElements);
+        if (page < 0) {
+            page = 0;
+        }
+        pageableAdvancedDtoOfEventDto.setCurrentPage(page);
+        return pageableAdvancedDtoOfEventDto;
     }
 }
