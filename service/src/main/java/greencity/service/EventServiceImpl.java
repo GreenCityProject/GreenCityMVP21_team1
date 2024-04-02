@@ -16,7 +16,6 @@ import greencity.enums.TagType;
 import greencity.exception.exceptions.NotSavedException;
 import greencity.mapping.TagMapper;
 import greencity.mapping.TagUaEnDtoMapper;
-import greencity.mapping.TagVOMapper;
 import greencity.repository.DatesLocationRepo;
 import greencity.repository.EventRepo;
 import lombok.RequiredArgsConstructor;
@@ -41,14 +40,14 @@ public class EventServiceImpl implements EventService {
     private final TagMapper tagMapper;
 
     @Override
-    public EventDto save(AddEventDtoRequest addEventDtoRequest, MultipartFile image, String email) {
+    public EventDto save(AddEventDtoRequest addEventDtoRequest, MultipartFile images, String email) {
         try {
             Event newEventToSave = modelMapper.map(addEventDtoRequest, Event.class);
             UserVO userVObyEmail = restClient.findByEmail(email);
             User user = modelMapper.map(userVObyEmail, greencity.entity.User.class);
             newEventToSave.setAuthor(user);
             newEventToSave.setTitle(addEventDtoRequest.getTitle());
-            String imageFile = fileService.upload(image);
+            String imageFile = fileService.upload(images);
             newEventToSave.setImage(imageFile);
             newEventToSave.setDescription(addEventDtoRequest.getDescription());
             newEventToSave.setOpen(addEventDtoRequest.getOpen());

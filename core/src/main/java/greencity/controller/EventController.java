@@ -38,9 +38,9 @@ public class EventController {
     public ResponseEntity<EventDto> save(
         @RequestPart @Valid AddEventDtoRequest addEventDtoRequest,
         @Parameter(description = "Image of event") @ImageValidation @RequestPart(required = false,
-            name = "image") MultipartFile image,
+            name = "image") MultipartFile images,
         @Parameter(hidden = true) Principal principal) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-            eventService.save(addEventDtoRequest, image, principal.getName()));
+            eventService.save(addEventDtoRequest, images, principal.getName()));
     }
 }
