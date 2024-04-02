@@ -5,8 +5,6 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="Loshkarjova-1" author="Kateryna Loshkarjova">
-        <validCheckSum>9:c3851bc652dd83f05d48f667ae2334e2</validCheckSum>
-
         <createTable tableName="events">
             <column name="id" autoIncrement="true" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -16,8 +14,17 @@
             <column name="author" type="BIGINT">
                 <constraints foreignKeyName="FK_events_users" references="users (id)"/>
             </column>
-            <column name="image" type="VARCHAR"/>
             <column name="open" type="BOOLEAN"/>
+        </createTable>
+
+        <createTable tableName="images">
+            <column name="id" autoIncrement="true" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="event_id" type="BIGINT">
+            <constraints foreignKeyName="FK_images_events" references="events(id)"/>
+            </column>
+            <column name="image" type="VARCHAR"/>
         </createTable>
 
 

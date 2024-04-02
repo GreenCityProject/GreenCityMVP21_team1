@@ -35,8 +35,10 @@ public class Event {
     @Column(name = "open", nullable = false)
     private Boolean open = EVENT_DEFAULT_STATUS;
 
-    @Column
-    private String image;
+    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
+    @CollectionTable(name = "images", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "image", nullable = false)
+    private List<String> images;
 
     @OneToMany(mappedBy = "event")
     private List<DateLocation> dateLocation;

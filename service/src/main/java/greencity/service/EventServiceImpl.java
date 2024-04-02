@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -40,15 +41,16 @@ public class EventServiceImpl implements EventService {
     private final TagMapper tagMapper;
 
     @Override
-    public EventDto save(AddEventDtoRequest addEventDtoRequest, MultipartFile images, String email) {
+    public EventDto save(AddEventDtoRequest addEventDtoRequest,List <MultipartFile> images, Long id) {
         try {
             Event newEventToSave = modelMapper.map(addEventDtoRequest, Event.class);
-            UserVO userVObyEmail = restClient.findByEmail(email);
-            User user = modelMapper.map(userVObyEmail, greencity.entity.User.class);
+            UserVO userVObyId = restClient.findById(id);
+            User user = modelMapper.map(userVObyId, greencity.entity.User.class);
             newEventToSave.setAuthor(user);
             newEventToSave.setTitle(addEventDtoRequest.getTitle());
-            String imageFile = fileService.upload(images);
-            newEventToSave.setImage(imageFile);
+            List<String> listImages = images.stream()
+                    .map(fileService::upload).collect(Collectors.toList());
+            newEventToSave.setImages(listImages);
             newEventToSave.setDescription(addEventDtoRequest.getDescription());
             newEventToSave.setOpen(addEventDtoRequest.getOpen());
             List<String> listTags = addEventDtoRequest.getTags();

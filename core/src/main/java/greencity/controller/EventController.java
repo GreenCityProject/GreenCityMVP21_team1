@@ -1,9 +1,11 @@
 package greencity.controller;
 
+import greencity.annotations.CurrentUser;
 import greencity.annotations.ImageValidation;
 import greencity.constant.HttpStatuses;
 import greencity.dto.event.EventDto;
 import greencity.dto.event.AddEventDtoRequest;
+import greencity.dto.user.UserVO;
 import greencity.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
 
 @Validated
 @RestController
@@ -36,11 +39,11 @@ public class EventController {
     })
     @PostMapping(path = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventDto> save(
-        @RequestPart @Valid AddEventDtoRequest addEventDtoRequest,
-        @Parameter(description = "Image of event") @ImageValidation @RequestPart(required = false,
-            name = "image") MultipartFile images,
-        @Parameter(hidden = true) Principal principal) {
+            @RequestPart @Valid AddEventDtoRequest addEventDtoRequest,
+            @Parameter(description = "Image of event") @Valid
+            @RequestPart(required = false) List<MultipartFile> images,
+            @Parameter(hidden = true) @CurrentUser UserVO userVO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-            eventService.save(addEventDtoRequest, images, principal.getName()));
+            eventService.save(addEventDtoRequest, images, userVO.getId()));
     }
 }

@@ -35,6 +35,9 @@ public class EventDto {
     private Boolean open = true;
 
     @NotEmpty
+    private List<String>images;
+
+    @NotEmpty
     private List<DatesLocationDto> datesLocationDtos;
 
     @NotNull
