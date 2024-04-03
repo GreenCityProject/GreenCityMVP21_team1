@@ -86,23 +86,4 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    @Override
-    public PageableAdvancedDtoOfEventDto getAll(Integer page, Integer size) {
-        List<Event> events = eventRepo.findAll();
-        List<EventDto> eventDtoList = events.stream()
-                .map(event -> modelMapper.map(event, EventDto.class))
-                .toList();
-        Long quantityOfTotalElements = ((long) eventDtoList.size());
-        PageableAdvancedDtoOfEventDto pageableAdvancedDtoOfEventDto = new PageableAdvancedDtoOfEventDto();
-        pageableAdvancedDtoOfEventDto.setPage(eventDtoList);
-        if (quantityOfTotalElements < 1L) {
-            quantityOfTotalElements = 5L;
-        }
-        pageableAdvancedDtoOfEventDto.setTotalElements(quantityOfTotalElements);
-        if (page < 0) {
-            page = 0;
-        }
-        pageableAdvancedDtoOfEventDto.setCurrentPage(page);
-        return pageableAdvancedDtoOfEventDto;
-    }
 }
