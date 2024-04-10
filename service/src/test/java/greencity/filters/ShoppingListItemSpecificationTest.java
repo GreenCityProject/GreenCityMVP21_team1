@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static greencity.entity.Translation_.content;
+import static java.lang.StringTemplate.STR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -53,19 +54,19 @@ public class ShoppingListItemSpecificationTest {
     @BeforeEach
     void setUp() {
         ShoppingListItemDto shoppingListItemDto =
-                new ShoppingListItemDto(1L, "content", "");
+            new ShoppingListItemDto(1L, "content", "");
         criteriaList = new ArrayList<>();
 
         criteriaList.add(SearchCriteria.builder()
-                .key("id")
-                .type("id")
-                .value(shoppingListItemDto.getId())
-                .build());
+            .key("id")
+            .type("id")
+            .value(shoppingListItemDto.getId())
+            .build());
         criteriaList.add(SearchCriteria.builder()
-                .key("content")
-                .type("content")
-                .value(shoppingListItemDto.getText())
-                .build());
+            .key("content")
+            .type("content")
+            .value(shoppingListItemDto.getText())
+            .build());
 
         ShoppingListItemTranslation_.shoppingListItem = shoppingListItem;
         ShoppingListItem_.id = id;
@@ -85,7 +86,7 @@ public class ShoppingListItemSpecificationTest {
 
         when(criteriaBuilderMock.conjunction()).thenReturn(predicateMock);
         when(itemTranslationRootMock.get(content)).thenReturn(pathStringMock);
-        when(criteriaBuilderMock.like(pathStringMock, STR."%\{criteriaList.get(1).getValue()}%")).thenReturn(predicateMock);
+        when(criteriaBuilderMock.like(pathStringMock, STR + "%" + criteriaList.get(1).getValue() + "%")).thenReturn(predicateMock);
         when(itemTranslationRootMock.get(ShoppingListItemTranslation_.shoppingListItem)).thenReturn(
                 shoppingListItemPath);
         when(shoppingListItemPath.get(ShoppingListItem_.id)).thenReturn(longPathMock);
