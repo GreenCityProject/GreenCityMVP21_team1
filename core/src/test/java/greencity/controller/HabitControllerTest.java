@@ -59,7 +59,8 @@ public class HabitControllerTest {
 
     @BeforeEach
     public void setUp() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(habitController).setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(habitController)
+            .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
     }
 
     @ParameterizedTest

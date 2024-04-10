@@ -38,11 +38,11 @@ public class SpecificationServiceImplTest {
     public void initModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper
-                .getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT)
-                .setFieldMatchingEnabled(true)
-                .setSkipNullEnabled(true)
-                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
+            .getConfiguration()
+            .setMatchingStrategy(MatchingStrategies.STRICT)
+            .setFieldMatchingEnabled(true)
+            .setSkipNullEnabled(true)
+            .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
         Field field;
         try {
             field = SpecificationServiceImpl.class.getDeclaredField("modelMapper");
@@ -82,8 +82,10 @@ public class SpecificationServiceImplTest {
 
     @Test
     void findAll() {
-        List<Specification> specifications = List.of(new Specification(1L, "Animal"), new Specification(2L, "Karaoke"), new Specification(3L, "Shopping"));
-        List<SpecificationVO> expected = specifications.stream().map(a -> new SpecificationVO(a.getId(), a.getName())).toList();
+        List<Specification> specifications = List.of(new Specification(1L, "Animal"), new Specification(2L, "Karaoke"),
+            new Specification(3L, "Shopping"));
+        List<SpecificationVO> expected =
+            specifications.stream().map(a -> new SpecificationVO(a.getId(), a.getName())).toList();
         Mockito.when(specificationRepo.findAll()).thenReturn(specifications);
         assertEquals(expected, specificationService.findAll());
     }
@@ -117,8 +119,10 @@ public class SpecificationServiceImplTest {
 
     @Test
     void findAllSpecificationDtoTest() {
-        List<Specification> specifications = List.of(new Specification(1L, "Animal"), new Specification(2L, "Karaoke"), new Specification(3L, "Shopping"));
-        List<SpecificationNameDto> expected = specifications.stream().map(a -> new SpecificationNameDto(a.getName())).toList();
+        List<Specification> specifications = List.of(new Specification(1L, "Animal"), new Specification(2L, "Karaoke"),
+            new Specification(3L, "Shopping"));
+        List<SpecificationNameDto> expected =
+            specifications.stream().map(a -> new SpecificationNameDto(a.getName())).toList();
         Mockito.when(specificationRepo.findAll()).thenReturn(specifications);
         assertEquals(expected, specificationService.findAllSpecificationDto());
     }
@@ -126,7 +130,8 @@ public class SpecificationServiceImplTest {
     @Test
     void findAllSpecificationDto_NotFound_EmptyList() {
         List<Specification> specifications = List.of();
-        List<SpecificationNameDto> expected = specifications.stream().map(a -> new SpecificationNameDto(a.getName())).toList();
+        List<SpecificationNameDto> expected =
+            specifications.stream().map(a -> new SpecificationNameDto(a.getName())).toList();
         Mockito.when(specificationRepo.findAll()).thenReturn(specifications);
         List<SpecificationNameDto> actual = specificationService.findAllSpecificationDto();
         assertEquals(expected, actual);

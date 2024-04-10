@@ -1,12 +1,17 @@
 package greencity.dto.tag;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 @Builder
+@ToString
 public class TagUaEnDto {
-    private long id;
+    private Long id;
     private String nameUa;
     private String nameEn;
 }

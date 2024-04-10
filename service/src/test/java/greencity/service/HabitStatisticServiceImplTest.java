@@ -50,7 +50,6 @@ public class HabitStatisticServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-
     @Test
     void saveByHabitIdAndUserId_habitStatisticAlreadyExist_throwException() {
         Long habitId = 1L;
@@ -60,8 +59,9 @@ public class HabitStatisticServiceImplTest {
         ZonedDateTime dtoCreateDate = dto.getCreateDate();
 
         Mockito.when(habitStatisticRepo.findStatByDateAndHabitIdAndUserId(dtoCreateDate, habitId, userId))
-                .thenReturn(Optional.of(habitStatistic));
-        Assertions.assertThrows(NotSavedException.class, () -> habitStatisticService.saveByHabitIdAndUserId(habitId, userId, dto));
+            .thenReturn(Optional.of(habitStatistic));
+        Assertions.assertThrows(NotSavedException.class,
+            () -> habitStatisticService.saveByHabitIdAndUserId(habitId, userId, dto));
     }
 
     @Test
@@ -73,14 +73,13 @@ public class HabitStatisticServiceImplTest {
         HabitStatistic habitStatistic = new HabitStatistic();
         ZonedDateTime dtoCreateDate = dto.getCreateDate();
 
-
         Mockito.when(habitStatisticRepo.findStatByDateAndHabitIdAndUserId(dtoCreateDate, habitId, userId))
-                .thenReturn(Optional.empty());
+            .thenReturn(Optional.empty());
         Mockito.when(dateService.convertToDatasourceTimezone(dtoCreateDate)).thenReturn(dtoCreateDate);
         Mockito.when(modelMapper.map(dto, HabitStatistic.class)).thenReturn(habitStatistic);
         Mockito.when(habitAssignRepo.findByHabitIdAndUserId(habitId, userId)).thenReturn(Optional.empty());
         Assertions.assertThrows(NotFoundException.class,
-                () -> habitStatisticService.saveByHabitIdAndUserId(habitId, userId, dto));
+            () -> habitStatisticService.saveByHabitIdAndUserId(habitId, userId, dto));
 
     }
 
@@ -98,9 +97,8 @@ public class HabitStatisticServiceImplTest {
         HabitStatisticDto habitStatisticDto = new HabitStatisticDto();
         habitStatisticDto.setId(habitStatisticId);
 
-
         Mockito.when(habitStatisticRepo.findStatByDateAndHabitIdAndUserId(dtoCreateDate, habitId, userId))
-                .thenReturn(Optional.empty());
+            .thenReturn(Optional.empty());
         Mockito.when(dateService.convertToDatasourceTimezone(dtoCreateDate)).thenReturn(dtoCreateDate);
         Mockito.when(modelMapper.map(dto, HabitStatistic.class)).thenReturn(habitStatistic);
         Mockito.when(habitAssignRepo.findByHabitIdAndUserId(habitId, userId)).thenReturn(Optional.of(habitAssign));
@@ -126,14 +124,13 @@ public class HabitStatisticServiceImplTest {
         HabitStatisticDto habitStatisticDto = new HabitStatisticDto();
         habitStatisticDto.setId(habitStatisticId);
 
-
         Mockito.when(habitStatisticRepo.findStatByDateAndHabitIdAndUserId(dtoCreateDate, habitId, userId))
-                .thenReturn(Optional.empty());
+            .thenReturn(Optional.empty());
         Mockito.when(dateService.convertToDatasourceTimezone(dtoCreateDate)).thenReturn(dtoCreateDate);
 
         Mockito.verify(habitAssignRepo, Mockito.times(0)).save(habitAssign);
         Assertions.assertThrows(BadRequestException.class,
-                () -> habitStatisticService.saveByHabitIdAndUserId(habitId, userId, dto));
+            () -> habitStatisticService.saveByHabitIdAndUserId(habitId, userId, dto));
     }
 
     @Test
@@ -144,7 +141,7 @@ public class HabitStatisticServiceImplTest {
 
         Mockito.when(habitStatisticRepo.findById(habitStatisticId)).thenReturn(Optional.empty());
         Assertions.assertThrows(NotFoundException.class,
-                () -> habitStatisticService.update(habitStatisticId, userId, dto));
+            () -> habitStatisticService.update(habitStatisticId, userId, dto));
     }
 
     @Test
@@ -158,7 +155,6 @@ public class HabitStatisticServiceImplTest {
         UpdateHabitStatisticDto dto = new UpdateHabitStatisticDto();
         HabitStatistic habitStatistic = new HabitStatistic();
         habitStatistic.setHabitAssign(habitAssign);
-
 
         Mockito.when(habitStatisticRepo.findById(habitStatisticId)).thenReturn(Optional.of(habitStatistic));
         Mockito.when(habitStatisticRepo.save(habitStatistic)).thenReturn(habitStatistic);
@@ -179,12 +175,11 @@ public class HabitStatisticServiceImplTest {
         HabitStatistic habitStatistic = new HabitStatistic();
         habitStatistic.setHabitAssign(habitAssign);
 
-
         Mockito.when(habitStatisticRepo.findById(habitStatisticId)).thenReturn(Optional.of(habitStatistic));
         Mockito.verify(habitStatisticRepo, Mockito.times(0)).save(habitStatistic);
 
         Assertions.assertThrows(BadRequestException.class,
-                () -> habitStatisticService.update(habitStatisticId, 3L, dto));
+            () -> habitStatisticService.update(habitStatisticId, 3L, dto));
 
     }
 
@@ -204,7 +199,6 @@ public class HabitStatisticServiceImplTest {
         HabitStatisticDto habitStatisticDto = new HabitStatisticDto();
         habitStatisticDto.setId(existedId);
 
-
         Mockito.when(habitStatisticRepo.findById(existedId)).thenReturn(Optional.of(habitStatistic));
         Mockito.when(modelMapper.map(habitStatistic, HabitStatisticDto.class)).thenReturn(habitStatisticDto);
         HabitStatisticDto result = habitStatisticService.findById(existedId);
@@ -218,7 +212,7 @@ public class HabitStatisticServiceImplTest {
 
         Mockito.when(habitAssignRepo.findById(notExistedId)).thenReturn(Optional.empty());
         Assertions.assertThrows(NotFoundException.class,
-                () -> habitStatisticService.findAllStatsByHabitAssignId(notExistedId));
+            () -> habitStatisticService.findAllStatsByHabitAssignId(notExistedId));
 
     }
 
@@ -249,7 +243,8 @@ public class HabitStatisticServiceImplTest {
 
         Mockito.when(habitRepo.findById(notExistedId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(NotFoundException.class, () -> habitStatisticService.findAllStatsByHabitAssignId(notExistedId));
+        Assertions.assertThrows(NotFoundException.class,
+            () -> habitStatisticService.findAllStatsByHabitAssignId(notExistedId));
     }
 
     @Test
@@ -275,7 +270,7 @@ public class HabitStatisticServiceImplTest {
         Assertions.assertEquals(habitStatisticDtoList, result.getHabitStatisticDtoList());
     }
 
-    //todo finish getTodayStatisticsForAllHabitItems test
+    // todo finish getTodayStatisticsForAllHabitItems test
     @Test
     void getAmountOfHabitsInProgressByUserId_returnAmountOfHabitsInProgress() {
         Long userId = 1L;
@@ -313,6 +308,5 @@ public class HabitStatisticServiceImplTest {
 
         Mockito.verify(habitStatisticRepo, Mockito.times(1)).delete(habitStatistic);
     }
-
 
 }
