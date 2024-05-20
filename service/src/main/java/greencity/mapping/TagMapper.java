@@ -8,6 +8,7 @@ import org.modelmapper.AbstractConverter;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TagMapper extends AbstractConverter<TagVO, Tag> {
@@ -23,5 +24,9 @@ public class TagMapper extends AbstractConverter<TagVO, Tag> {
                 .build()));
         tag.setTagTranslations(tagTranslations);
         return tag;
+    }
+
+    public List<Tag> mapAllToList (List<TagVO> tagsVO){
+       return tagsVO.stream().map(this::convert).collect(Collectors.toList());
     }
 }
